@@ -1,50 +1,21 @@
-const express = require('express') // require the express package 
-const app = express() // initialize your express app instance
-const cors = require('cors');
-const PORT = process.env.PORT ;
-const axios = require('axios'); // require the package
-const weather = require('./data/weather.json')
+'use strict';
 require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const server = express();
+server.use(cors());
 
-app.use(cors()) // after you initialize your express app instance
-// a server endpoint 
+const PORT = process.env.PORT;
 
+const handleWeather =require('./controller/Weather.controller');
+const moviesHandler = require('./controller/Movie.controller');
 
-server.get('/', (req, res)=> { 
-  res.send('Hello World') 
-})
- 
+server.get('/weather/:lon/:lat', handleWeather);
+server.get('/movies/:query', moviesHandler);
 
-server.get('/weather', (req, res)=> { 
-    res.send(weather) 
-  })
-   
-  server.get('/weather/:lon/:lat/:city_name', (req, res)=> { 
-    const data = weather.find((elem)=> +elem.lon === +req.params.lon&& +elem.lat === +req.params.lat&& 
-    elem.city_name === req.params.city_name )
-          if(data){
-              res.send(data)
-
-          }else{res.send('the city not found ')}
-  }) ;
-
-  server.get('/weather/:city_name', (req, res)=> { 
-  let weatherArr = [] ;
-  const findcity = weather.find( (elem)=> elem.city_name === req.params.city_name)
-  if(findcity){findcity.map((day)=> newWeathwe.push(new Forcast(day))) ;
-res.send(newWeather) ;
-}else{
-    res.status(500).send('the location was not found ')
-}
-  }) ;
-
-  class Forecast{
-      constructor(city){
-          this.date = city.datetime 
-          this.description = city.weather.description 
-      }
-
-  }
+server.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
 
 app.listen(PORT,()=>{

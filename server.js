@@ -19,5 +19,5 @@ server.get('/', (req, res) => {
 
 
 app.listen(PORT,()=>{
-    console.log('hello from noortan')
+    console.log('hello from noortan ${PORT}')
 })  // kick start the express server to work
